@@ -1,0 +1,23 @@
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+
+    sourceCompatibility = 23
+    targetCompatibility = 23
+
+    group 'com.mossonthetree'
+    version '1.0'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    tasks.withType(Jar) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+}

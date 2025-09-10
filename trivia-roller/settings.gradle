@@ -1,0 +1,17 @@
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        mavenLocal()
+    }
+
+    def quarkusVersion = providers.gradleProperty('io.quarkus.version').orNull ?: '3.25.0'
+
+    plugins {
+        id "io.quarkus" version quarkusVersion
+    }
+}
+
+rootProject.name = 'trivia-roller'
+include 'trivia-roller-api'
+include 'trivia-roller-lib'

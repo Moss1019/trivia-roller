@@ -1,0 +1,13 @@
+services:
+  trivia-roller-api:
+    image: trivia-roller-api
+    container_name: trivia-roller-api
+    ports:
+      - "8080:8080"
+    networks:
+      - trivia-roller-api
+
+networks:
+  trivia-roller-api:
+    name: trivia-roller-api
+    driver: bridge
