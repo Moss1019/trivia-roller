@@ -12,6 +12,9 @@ dependencies {
     implementation "io.quarkus:quarkus-arc:${quarkusVersion}"
     implementation "io.quarkus:quarkus-smallrye-openapi:${quarkusVersion}"
 
+    implementation "io.quarkus:quarkus-smallrye-jwt:${quarkusVersion}"
+    implementation "io.quarkus:quarkus-smallrye-jwt-build:${quarkusVersion}"
+
     implementation 'com.google.code.gson:gson:2.13.1'
 
     implementation project(path: ':trivia-roller-lib')

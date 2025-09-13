@@ -5,14 +5,18 @@ import com.mossonthetree.trivia.model.Difficulty;
 import com.mossonthetree.trivia.model.Question;
 import com.mossonthetree.trivia.result.RestResult;
 import com.mossonthetree.trivia.service.QuestionService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.SecurityContext;
 
 import java.util.List;
 
 @Path("")
 @ApplicationScoped()
+@Produces(MediaType.APPLICATION_JSON)
 public class QuestionResource extends Resource {
     private final QuestionService service;
 
@@ -22,7 +26,7 @@ public class QuestionResource extends Resource {
 
     @GET()
     @Path("questions")
-    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("User")
     public RestResult<List<Question>> get(@QueryParam("amount") @DefaultValue("10") int amount,
                                           @QueryParam("category") @DefaultValue("ANY") Category category,
                                           @QueryParam("difficulty") @DefaultValue("ANY") Difficulty difficulty) {
@@ -31,14 +35,14 @@ public class QuestionResource extends Resource {
 
     @GET()
     @Path("categories")
-    @Produces(MediaType.APPLICATION_JSON)
-    public RestResult<List<Category.Details>> getCategories() {
+    @RolesAllowed("User")
+    public RestResult<List<Category.Details>> getCategories(@Context() SecurityContext ctx) {
         return extract(service.getCategories());
     }
 
     @GET()
     @Path("difficulty-levels")
-    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("User")
     public RestResult<List<Difficulty.Details>> getDifficultyLevels() {
         return extract(service.getDifficultyLevels());
     }

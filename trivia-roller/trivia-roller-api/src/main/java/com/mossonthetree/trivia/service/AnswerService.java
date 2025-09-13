@@ -6,6 +6,7 @@ import com.mossonthetree.trivia.model.AnswerSubmission;
 import com.mossonthetree.trivia.model.ReportCard;
 import com.mossonthetree.trivia.result.OpResult;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,14 +15,22 @@ import java.util.List;
 public class AnswerService {
     private final AnswerCoordinator coordinator;
 
-    public AnswerService(AnswerCoordinator coordinator) {
+    private final int maxSubmissions;
+
+    public AnswerService(AnswerCoordinator coordinator,
+                         @ConfigProperty(name = "triviadb.max-questions") int maxSubmissions) {
         this.coordinator = coordinator;
+        this.maxSubmissions = maxSubmissions;
     }
 
     public OpResult<ReportCard> evaluate(List<AnswerSubmission> submissions) {
+        if(submissions.size() > maxSubmissions) {
+            return OpResult.failed("Invalid number of answers, max is " + maxSubmissions);
+        }
+
         var evaluations = new LinkedList<AnswerEvaluation>();
         var score = 0.0f;
-        for(AnswerSubmission submission : submissions) {
+        for(var submission : submissions) {
             var answer = coordinator.get(submission.questionId());
             if(answer == null) {
                 return OpResult.failed("Answer not found for " + submission.questionId());
@@ -34,6 +43,7 @@ public class AnswerService {
         }
         score *= 100.0f;
         score /= submissions.size();
+
         return OpResult.successful(new ReportCard(score, evaluations));
     }
 }

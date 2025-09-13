@@ -23,7 +23,7 @@ public class QuestionServiceTest {
                 .thenReturn(OpResult.successful(createRateLimitedResponse()));
 
         var coordinator = new AnswerCoordinator();
-        var sut = new QuestionService(client, coordinator);
+        var sut = new QuestionService(client, coordinator, 10);
 
         var actual = sut.get(5, Category.GENERAL, Difficulty.EASY);
         Assertions.assertTrue(actual.isValid());
@@ -36,12 +36,12 @@ public class QuestionServiceTest {
     }
 
     @Test()
-    public void testGetPopulateCache() {
+    public void testGetPopulateCoordinator() {
         Mockito.when(client.getQuestions(5, Category.GENERAL, Difficulty.EASY))
                 .thenReturn(OpResult.successful(createSuccessResponse()));
 
         var sut = new AnswerCoordinator();
-        var questionService = new QuestionService(client, sut);
+        var questionService = new QuestionService(client, sut, 10);
 
         var actual = questionService.get(5, Category.GENERAL, Difficulty.EASY);
         Assertions.assertTrue(actual.isValid());
@@ -49,6 +49,16 @@ public class QuestionServiceTest {
 
         var answer = sut.get(firstQuestionId);
         Assertions.assertEquals("Yes", answer.correctAnswer());
+    }
+
+    @Test()
+    public void testGetTooManyRequests() {
+        var sut = new AnswerCoordinator();
+        var questionService = new QuestionService(client, sut, 10);
+
+        var actual = questionService.get(15, Category.GENERAL, Difficulty.EASY);
+        Assertions.assertFalse(actual.isValid());
+        Assertions.assertEquals("Too many questions requested, max is 10", actual.getErrorMessage());
     }
 
     private QuestionRestClient.QuestionsResponse createSuccessResponse() {

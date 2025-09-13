@@ -28,7 +28,7 @@ public enum Category {
     COMICS("Entertainment: Comics", 29),
     GADGETS("Science: Gadgets", 30),
     AMINE_MANGA("Entertainment: Japanese Anime &amp; Manga", 31),
-    CARTOONS("Entertainment: Cartoon &amp; Animations", 32);
+    CARTOONS("Entertainment: Cartoons &amp; Animations", 32);
 
     public final String label;
 

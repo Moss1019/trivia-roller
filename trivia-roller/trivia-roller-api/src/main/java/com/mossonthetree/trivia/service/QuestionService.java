@@ -8,6 +8,7 @@ import com.mossonthetree.trivia.model.Difficulty;
 import com.mossonthetree.trivia.model.Question;
 import com.mossonthetree.trivia.result.OpResult;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.*;
 
@@ -19,13 +20,24 @@ public class QuestionService {
 
     private final AnswerCoordinator coordinator;
 
+    private final int maxQuestions;
+
     public QuestionService(QuestionRestClient client,
-                           AnswerCoordinator coordinator) {
+                           AnswerCoordinator coordinator,
+                           @ConfigProperty(name = "triviadb.max-questions") int maxQuestions) {
         this.client = client;
         this.coordinator = coordinator;
+        this.maxQuestions = maxQuestions;
     }
 
     public OpResult<List<Question>> get(int amount, Category category, Difficulty difficulty) {
+        if(amount < 0) {
+            amount *= -1;
+        }
+        if(amount > maxQuestions) {
+            return OpResult.failed("Too many questions requested, max is " + maxQuestions);
+        }
+
         var questionsRes = client.getQuestions(amount, category, difficulty);
         if(!questionsRes.isValid()) {
             return OpResult.failed(questionsRes.getErrorMessage());

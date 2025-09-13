@@ -20,7 +20,7 @@ public class AnswerServiceTest {
         Mockito.when(coordinator.get(testId))
                 .thenReturn(new Answer(testId, "Is this Java code", "Yes"));
 
-        var sut = new AnswerService(coordinator);
+        var sut = new AnswerService(coordinator, 10);
 
         var answersSubmissions = List.of(new AnswerSubmission(testId, "Yes"));
 
@@ -36,12 +36,25 @@ public class AnswerServiceTest {
         Mockito.when(coordinator.get("some-id"))
                 .thenReturn(null);
 
-        var sut = new AnswerService(coordinator);
+        var sut = new AnswerService(coordinator, 10);
 
         var answersSubmissions = List.of(new AnswerSubmission("some-id", "Yes"));
 
         var actualRes = sut.evaluate(answersSubmissions);
         Assertions.assertFalse(actualRes.isValid());
         Assertions.assertEquals("Answer not found for some-id", actualRes.getErrorMessage());
+    }
+
+    @Test()
+    public void testEvaluateTooManySubmissions() {
+
+        var sut = new AnswerService(coordinator, 1);
+
+        var answersSubmissions = List.of(new AnswerSubmission("some-id", "Yes"),
+                new AnswerSubmission("some-id-2", "No"));
+
+        var actualRes = sut.evaluate(answersSubmissions);
+        Assertions.assertFalse(actualRes.isValid());
+        Assertions.assertEquals("Invalid number of answers, max is 1", actualRes.getErrorMessage());
     }
 }

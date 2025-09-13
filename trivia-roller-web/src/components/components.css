@@ -1,0 +1,24 @@
+
+
+/* progress-bubbles */
+.progress-entry {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.progress-entry-unanswered {
+    background-color: chocolate;
+}
+
+.progress-entry-answered {
+    background-color: green;
+}
+
+.progress-entry-current {
+    background-color: darkblue;
+}

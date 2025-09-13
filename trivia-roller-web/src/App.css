@@ -1,0 +1,57 @@
+
+.pointer {
+    cursor: pointer;
+}
+
+/* margins and paddings */
+.mt25 {
+    margin-top: 1.25rem;
+}
+
+.mr25 {
+    margin-right: 1.25rem;
+}
+
+.ml25 {
+    margin-left: 1.25rem;
+}
+
+    /* width and height */
+.fill-width {
+    width: 100%;
+}
+
+.margined-width {
+    width: 66.6%;
+}
+
+.fill-height {
+    height: 100%;
+}
+
+.inherit-height {
+    height: inherit;
+    min-height: inherit;
+}
+
+/* flex box */
+.justify-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.justify-center {
+    display: flex;
+    justify-content: center;
+}
+
+.align-center {
+    display: flex;
+    align-items: center;
+}
+
+.column-align-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
