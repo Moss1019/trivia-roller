@@ -22,8 +22,10 @@ function QuestionContainer(props) {
             </Box>
             <Box className="mt25">
                 <RadioGroup
+                    value={props.value}
                     defaultValue="0"
                     name="radio-buttons-group"
+                    onChange={(ev) => {props.onSelectionChange(ev.target.value)}}
                 >
                     {getAnswerOptions()}
                 </RadioGroup>

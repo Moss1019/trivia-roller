@@ -5,13 +5,14 @@ import Footer from "../sections/footer.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useMemo, useRef, useState} from "react";
 import QuestionService from "../services/question-service.js";
-import {setCategories, setDifficulties, setQuestions} from "../store.js";
+import {setCategories, setDifficulties, setQuestions, setSnackbarMessage, setSnackbarMessageShow} from "../store.js";
 import LabeledSelect from "../components/labeled-select.jsx";
 import LabeledInput from "../components/labeled-input.jsx";
 import escapeHtml from "../extensions/html-entity-extension.js";
 import {useNavigate} from "react-router-dom";
 
 function TriviaStartPage() {
+    const token = useSelector(state => state.token.value);
     const categories = useSelector(state => state.categories.value);
     const difficulties = useSelector(state => state.difficulties.value);
     const questions = useSelector(state => state.questions.value);
@@ -19,7 +20,14 @@ function TriviaStartPage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const questionServiceRef = useRef(new QuestionService(console.log));
+    const showError = (message) => {
+        dispatch(setSnackbarMessage(message));
+        dispatch(setSnackbarMessageShow(true));
+    }
+
+    const questionServiceRef = useRef(new QuestionService(token, (err) => {
+        showError('Remote server error: ' + err.message);
+    }));
 
     const [amount, setAmount] = useState(5);
     const [category, setCategory] = useState('');
@@ -31,12 +39,16 @@ function TriviaStartPage() {
                 dispatch(setCategories(categories));
                 setCategory(categories[0].category);
             });
+        } else {
+            setCategory(categories[0].category);
         }
         if (difficulties.length === 0) {
             questionServiceRef.current.getDifficulties((difficulties) => {
                 dispatch(setDifficulties(difficulties));
                 setDifficulty(difficulties[0].difficulty);
             })
+        } else {
+            setDifficulty(difficulties[0].difficulty);
         }
     }, [categories, difficulties, dispatch]);
 
@@ -70,7 +82,7 @@ function TriviaStartPage() {
             questionServiceRef.current.getQuestions(amount, category, difficulty, (questions) => {
                 dispatch(setQuestions(questions.map(q => ({...q, answered: false}))));
                 navigate('/trivia-run');
-            })
+            }, showError)
         }
     }
 

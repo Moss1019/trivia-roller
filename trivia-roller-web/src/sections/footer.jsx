@@ -1,10 +1,11 @@
 import './sections.css'
-import {Box} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 
 function Footer() {
     return (
-        <Box className="footer">
-            Footer
+        <Box className="footer justify-between">
+            <Typography variant="caption">v1.0</Typography>
+            <Typography variant="caption">backend: {import.meta.env.VITE_TRIVIA_ROLLER_URL}</Typography>
         </Box>
     );
 }

@@ -4,6 +4,7 @@ import io.smallrye.jwt.build.Jwt;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.HashSet;
 
@@ -27,6 +28,7 @@ public class AuthService {
                 .groups(new HashSet<>(Collections.singletonList(role)))
                 .claim("username", username)
                 .claim("email", username + "@quarkus.io")
+                .expiresAt(System.currentTimeMillis() / 1000 + Duration.ofDays(1).getSeconds())
                 .sign();
     }
 

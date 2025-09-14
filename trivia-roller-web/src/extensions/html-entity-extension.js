@@ -1,10 +1,11 @@
 
-const pattern = /&([a-z0-9#]+);/g
+const pattern = /&([a-z0-9#]*);/g
 
 const replacements = {
     'amp': '&',
     'quot': '"',
-    '#039': '\''
+    '#039': '\'',
+    'aacute': 'á'
 };
 
 function escapeHtml(html) {

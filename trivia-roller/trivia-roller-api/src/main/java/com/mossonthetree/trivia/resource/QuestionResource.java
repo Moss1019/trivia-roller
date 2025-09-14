@@ -11,6 +11,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.SecurityContext;
+import org.jboss.logging.Logger;
 
 import java.util.List;
 
@@ -18,6 +19,8 @@ import java.util.List;
 @ApplicationScoped()
 @Produces(MediaType.APPLICATION_JSON)
 public class QuestionResource extends Resource {
+    private static final Logger LOG = Logger.getLogger(QuestionResource.class);
+
     private final QuestionService service;
 
     public QuestionResource(QuestionService service) {
@@ -30,6 +33,7 @@ public class QuestionResource extends Resource {
     public RestResult<List<Question>> get(@QueryParam("amount") @DefaultValue("10") int amount,
                                           @QueryParam("category") @DefaultValue("ANY") Category category,
                                           @QueryParam("difficulty") @DefaultValue("ANY") Difficulty difficulty) {
+        LOG.info("Getting " + amount + " questions");
         return extract(service.get(amount, category, difficulty));
     }
 

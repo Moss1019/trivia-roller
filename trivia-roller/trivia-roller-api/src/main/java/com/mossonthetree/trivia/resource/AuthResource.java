@@ -9,10 +9,13 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.jboss.logging.Logger;
 
 @Path("api/auth")
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthResource extends Resource {
+    private static final Logger LOG = Logger.getLogger(AuthResource.class);
+
     private final AuthService service;
 
     public AuthResource(AuthService service) {
@@ -26,6 +29,7 @@ public class AuthResource extends Resource {
         if(service.authenticate(login)) {
             return RestResult.success(service.generateToken(login.username(), "User"));
         }
+        LOG.warn("Invalid login attempt for " + login.username());
         throw new UnauthorizedException("Invalid username or password");
     }
 }
