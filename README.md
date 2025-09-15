@@ -13,14 +13,29 @@ The application requires the open trivia db service to be available, https://ope
 ## Locally
 This is a quarkus application, it can be started in development mode by running gradle quarkusDev. Building the application also goes via gradle, with gradle quarkusBuild.
 The app can then be started with java -jar quarkus-run.jar in the travia-roller-api/build/quarkus-app directory
+
+```
+cd trivia-roller/trivia-roller-api
+gradle quarkusDev
+```
+
 ```
 cd travia-roller
 gradle quarkusBuild
 cd travia-roller-api/build/quarkus-app
 java -jar quarkus-run.jar
 ```
+
+For the frontend react app, nodejs is required. To run in development mode, navigate to the directory and run npm run dev.
+
+```
+cd trivia-roller-web
+npm run dev
+```
+
+
 ## Docker
-There is a docker image available as well, in the _docker directory, run build.sh. This will put the image together.
+There is a docker image available for the quarkus app, in the _docker directory, run build.sh. This will put the image together.
 The app can then be started with docker compose up.
 ```
 cd travia-roller/trivia-roller-api/_docker
